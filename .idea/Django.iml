@@ -3,9 +3,8 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/projects/portfolio" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/tests/hashthat" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/projects/nandiasgarden-project" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/APIs/tutorial" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/APIs/tutorial/tutorial" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
