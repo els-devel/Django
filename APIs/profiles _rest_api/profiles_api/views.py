@@ -1,22 +1,22 @@
+import subprocess
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
-from profiles_api import permissions
-
+from rest_framework import filters
 
 from profiles_api import models
-import subprocess
-
+from profiles_api import permissions
 from profiles_api import serializers
+
 
 class Heartbeat(APIView):
     """Test API View"""
 
     def get(self, request, format=None):
-
         return Response("API is ALIVE.")
+
 
 class Eric(APIView):
     """Full API View"""
@@ -85,6 +85,7 @@ class SecretsEngine(APIView):
 
     ######### VIEWSETS #################################################################
 
+
 class HelloViewSet(viewsets.ViewSet):
     """Test API viewset"""
     serializer_class = serializers.HelloSerializer
@@ -136,10 +137,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
-    authentication_classes = (TokenAuthentication,) # can add as many authentication classes you want for
+    authentication_classes = (TokenAuthentication,)  # can add as many authentication classes you want for
     # multiple types of authentication
     permission_classes = (permissions.UpdateOwnProfile,)
-
-
-
-
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name','email',)
