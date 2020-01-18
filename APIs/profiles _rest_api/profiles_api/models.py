@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-
+from django.contrib.auth.models import User
+from django.conf import settings
+import uuid
+import subprocess
 
 class UserProfileManager(BaseUserManager):
     """Manager for User Profiles
@@ -59,3 +62,65 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+
+
+class DatabaseItem(models.Model):
+    """Profile status update"""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    key = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    # user_profile = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL,
+    #     on_delete=models.CASCADE,
+    # )
+
+    def make_entry(self, key, value):
+        pk = self.id
+        key = key
+        value = value
+        created_on = self.created_on
+        #subprocess.run("psql...INSERT (id,  ))
+        return f"made database entry ({pk}, {key}, {value}, {created_on}"
+
+    def get_value(self, key):
+        #subprocess.run("psql -U postgres -c SELECT * ON TABLE secrets FOR key ({key});"
+        return f"getting the value for {key}..."
+
+    def __str__(self):
+        """Return the model as a string"""
+        return f"{self.key} item"
+
+
+#class SecretsManager(models.manager.BaseManager):
+class SecretsManager(BaseUserManager):
+
+    def __str__(self):
+        return "Secrets Manager Object"
+    # def create_secret(self, key, value):
+    #     kv = self.model(key=key, value=value)
+    #     return kv
+
+
+
+class Secrets(models.Model):
+    """Profile status update"""
+
+    id = models.UUIDField(primary_key=True, default=str(uuid.uuid4()), editable=False)
+    key = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    objects = SecretsManager()
+
+    def get_value(self, key):
+        #subprocess.run("psql -U postgres -c SELECT * ON TABLE secrets FOR key ({key});"
+        return f"getting the value for {key}..."
+
+    def __str__(self):
+        """Return the model as a string"""
+        return f"{self.key} item"
+
+

@@ -1,0 +1,131 @@
+Django
+-------
+
+Object-Relational Mapping
+URL Routing
+HTML Templating
+Form Handling
+
+
+manage.py
+	runs commands
+wsgi.py
+	provides a hook for web-servers such as apache or nginx
+shelters/settings.py
+	configure Django
+sheler/urls.py
+	routes request based on url
+
+
+
+python3 manage.py startapp adoptions
+
+pieces of an App
+	apps.py - configuration and initilization
+	models.py - data layer
+	admin.py - admin interface
+	urls.py - url routing
+	views.py - control layer
+	tests.py - tests the app
+	migrations - holds migration files
+
+Django is MVC but has a different name for compenents:
+	Models - a class with attributes that define the schema (underlying structure) of the database table
+	Views - get HTTP request and return HTTP response, return python objects, enhanced with templates
+	URL Patterns (controller)
+	Templates (part of Views)
+
+
+a Model is a class that inherits from django.db.models.Model
+
+"""
+from django.db import models
+
+class Item(models.Model):
+	title = models.CharField(....
+"""
+
+then we define field types (these are database fields)
+IntergerField, DecimalField, CharField, TextField, EmailField, BooleanField, DateTimeField, ForeignKey, ManyToMany, URLField
+
+each field has many attributes, put inside the brackets
+
+www.djangoproject.com has all the field types and their attributes listed
+
+When a model is added to a models.py file, the database is not yet created. An initial migration is needed.
+Changes in models, fields, or attributes all require migrations.
+python3 manage.py makemigrations
+python3 manage.py showmigrations
+python3 manage.py migrate
+
+also: migrate <appname> <number>
+
+
+------
+
+calls to <model>.objects.get() can raise two different exceptions:
+	1) DNE
+		for this need a catch that returns 404 not found
+	2) Multiple objects returned805
+
+from django.confs.urls import url
+from adoptions import views
+
+urlpattens = [
+	url(r'^$', views.home, name='index')
+]
+
+
+Django Templates:
+
+{{ variable }}
+{% tag %}
+{{ variable|filter }}
+example:
+<h3>{{ pet.name }}</h3>
+
+
+README for TESTING
+
+* Add a testing database to settings.py (i.e. 'TEST_NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'))
+* in test.py:
+    "from django.test import TestCase"
+    "from selenium import webdriver"
+    * make classes: FunctionalTestCase(TestCase), UnitTestCase(TestCase)
+    * write methods to test your app
+
+
+
+make a script that starts new app and updates settings.py for it?
+
+*If you are using a post method you need csrf_token to protect you from cross-site scripting, like so:
+<form action="{% url 'order' %}" method="post">
+    {% csrf_token %}
+
+
+MIGRATIONS
+
+The way that django manages databases is through something called a migration file, which basically has instructions
+to make the database match the models. To make a migration file use the command "makemigrations"
+Then to get the migration file to update the database you use the command "migrate"
+* if you want to just speficy an app to make migrations for you can run "makemigrations app"
+* e.g. python3 manage.py makemigrations api_app
+
+AUTORELOADER
+* the autoreloader in django is called 'StatReloader' (its a class)
+* if you have issues with it (I had a problem with it autoreloading rapidly and breaking the website) use the --noreload flag
+* python3 manage.py runserver --noreload xxxx:8000
+
+API_VIEW
+an_apiview = [
+            'Uses HTTP methods as functions (get, port, patch, put, delete)',
+            'Is similar to a traditional Django View',
+            'Gives you the most control of your application logic',
+            'Is mapped manually to URLS',
+        ]
+
+viewsets
+* take care of a lot of logic for you
+* perfect for standard database operations
+* fastest way to make an api with a database backend
+
